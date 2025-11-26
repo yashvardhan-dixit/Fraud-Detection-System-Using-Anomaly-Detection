@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  # Training service (run once)
+  training:
+    build: .
+    container_name: fraud_detection_training
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./results:/app/results
+      - ./logs:/app/logs
+    command: python train.py
+    profiles:
+      - training
+
+  # API service
+  api:
+    build: .
+    container_name: fraud_detection_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./models:/app/models
+      - ./logs:/app/logs
+    command: uvicorn src.api.app:app --host 0.0.0.0 --port 8000
+    depends_on:
+      - training
+    restart: unless-stopped
+
+  # Dashboard service
+  dashboard:
+    build: .
+    container_name: fraud_detection_dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+    command: streamlit run src/visualization/dashboard.py --server.port 8501 --server.address 0.0.0.0
+    depends_on:
+      - training
+    restart: unless-stopped
+
+volumes:
+  data:
+  models:
+  results:
+  logs:
