@@ -90,10 +90,10 @@ def main(args):
     logger.info(f"Training set: {X_train.shape[0]} samples")
     logger.info(f"Test set: {X_test.shape[0]} samples")
     
-    # Save test data for demo using proper indices
-    test_df = df.iloc[test_idx].copy()
-    test_df['fraud_score'] = np.random.rand(len(test_df))
-    test_df.to_csv('data/processed/demo_data.csv', index=False)
+    # Save a subset of test data for demo dashboard
+    # Note: fraud_score will be added after model training
+    demo_df = df.iloc[test_idx].copy()
+    demo_df.to_csv('data/processed/demo_data_raw.csv', index=False)
     
     # 4. Train Isolation Forest
     logger.info("\n[Step 4/7] Training Isolation Forest...")
@@ -202,6 +202,13 @@ def main(args):
     
     # Compare models
     comparison_df = evaluator.compare_models(save_path='results/model_comparison.csv')
+    
+    # Create demo data with actual fraud scores from model
+    logger.info("Creating demo data with fraud scores...")
+    demo_df = df.iloc[test_idx].copy()
+    demo_df['fraud_score'] = iso_scores
+    demo_df.to_csv('data/processed/demo_data.csv', index=False)
+    logger.info("Demo data saved with actual fraud scores")
     
     # 7. Generate explainability
     logger.info("\n[Step 7/7] Generating model explanations...")

@@ -1,16 +1,12 @@
-"""Example usage of the Fraud Detection System."""
+"""Example usage of the Fraud Detection System.
 
-import os
-import sys
+Note: This script requires the package to be installed.
+Run: pip install -e . from the project root directory.
+"""
+
 import numpy as np
 import pandas as pd
 from datetime import datetime
-from pathlib import Path
-
-# Add project root to path for examples directory
-project_root = Path(__file__).parent.parent
-if str(project_root) not in sys.path:
-    sys.path.insert(0, str(project_root))
 
 from src.data.generator import FraudDataGenerator
 from src.data.preprocessing import FeatureEngineer

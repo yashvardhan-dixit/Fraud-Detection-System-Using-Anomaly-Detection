@@ -6,14 +6,10 @@ import numpy as np
 import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
-import sys
 import os
 
-# Add parent directory to path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from utils.logger import get_logger, setup_logger
-from utils.config import get_config
+from src.utils.logger import get_logger, setup_logger
+from src.utils.config import get_config
 
 # Setup
 setup_logger()

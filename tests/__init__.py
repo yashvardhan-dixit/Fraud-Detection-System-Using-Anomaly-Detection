@@ -1,8 +1,5 @@
 """Tests initialization."""
 
-import sys
-import os
+# Tests should be run with the package installed (pip install -e .)
+# No sys.path manipulation needed
 
-# Add project root to path
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, project_root)
