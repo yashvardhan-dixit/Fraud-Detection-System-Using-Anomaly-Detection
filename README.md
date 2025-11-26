@@ -71,9 +71,19 @@ git clone https://github.com/yashvardhan-dixit/Fraud-Detection-System-Using-Anom
 cd Fraud-Detection-System-Using-Anomaly-Detection
 ```
 
-2. **Install dependencies**:
+2. **Create a virtual environment** (recommended):
 ```bash
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+3. **Install the package and dependencies**:
+```bash
+# Option 1: Install dependencies only
 pip install -r requirements.txt
+
+# Option 2: Install as a package (recommended)
+pip install -e .
 ```
 
 ### Training the Models

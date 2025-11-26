@@ -1,17 +1,12 @@
 """Main training pipeline for fraud detection system."""
 
 import os
-import sys
 import argparse
 from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.model_selection import train_test_split
 import joblib
-
-# Add project root to path
-project_root = Path(__file__).parent.parent
-sys.path.insert(0, str(project_root))
 
 from src.utils.logger import setup_logger, get_logger
 from src.utils.config import get_config
@@ -83,8 +78,10 @@ def main(args):
     # 3. Split data
     logger.info("\n[Step 3/7] Splitting data...")
     
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y,
+    # Split data while keeping track of indices
+    indices = np.arange(len(X))
+    X_train, X_test, y_train, y_test, train_idx, test_idx = train_test_split(
+        X, y, indices,
         test_size=config.get('data.test_size', 0.3),
         random_state=config.get('data.random_state', 42),
         stratify=y
@@ -93,8 +90,8 @@ def main(args):
     logger.info(f"Training set: {X_train.shape[0]} samples")
     logger.info(f"Test set: {X_test.shape[0]} samples")
     
-    # Save test data for demo
-    test_df = df.iloc[X_test[:, 0].argsort()[-len(X_test):]]
+    # Save test data for demo using proper indices
+    test_df = df.iloc[test_idx].copy()
     test_df['fraud_score'] = np.random.rand(len(test_df))
     test_df.to_csv('data/processed/demo_data.csv', index=False)
     
