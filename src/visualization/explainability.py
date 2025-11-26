@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import shap
 import matplotlib.pyplot as plt
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 from ..utils.logger import get_logger
 
 logger = get_logger()
@@ -216,7 +216,7 @@ class ModelExplainer:
         X: np.ndarray,
         prediction: float,
         top_n: int = 5
-    ) -> Dict[str, any]:
+    ) -> Dict[str, Any]:
         """Explain why a transaction was flagged as fraud.
         
         Args:
