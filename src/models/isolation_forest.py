@@ -108,7 +108,8 @@ class IsolationForestDetector:
         Args:
             filepath: Path to save the model
         """
-        joblib.dump(self.model, filepath)
+        # Save the entire detector object (not just self.model)
+        joblib.dump(self, filepath)
         logger.info(f"Model saved to {filepath}")
     
     def load(self, filepath: str) -> None:
