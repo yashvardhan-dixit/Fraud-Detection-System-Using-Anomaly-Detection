@@ -78,14 +78,19 @@ def main(args):
     # 3. Split data
     logger.info("\n[Step 3/7] Splitting data...")
     
-    # Split data while keeping track of indices
+    # Create indices to track the original dataframe rows
     indices = np.arange(len(X))
-    X_train, X_test, y_train, y_test, train_idx, test_idx = train_test_split(
+    
+    # Split using arrays=(X, y, indices) so we get train/test for each
+    split_result = train_test_split(
         X, y, indices,
         test_size=config.get('data.test_size', 0.3),
         random_state=config.get('data.random_state', 42),
         stratify=y
     )
+    
+    # Unpack: train_test_split returns (X_train, X_test, y_train, y_test, idx_train, idx_test)
+    X_train, X_test, y_train, y_test, train_idx, test_idx = split_result
     
     logger.info(f"Training set: {X_train.shape[0]} samples")
     logger.info(f"Test set: {X_test.shape[0]} samples")

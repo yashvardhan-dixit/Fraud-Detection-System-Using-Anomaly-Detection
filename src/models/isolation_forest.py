@@ -108,18 +108,32 @@ class IsolationForestDetector:
         Args:
             filepath: Path to save the model
         """
-        # Save the entire detector object (not just self.model)
-        joblib.dump(self, filepath)
+        # Save model parameters and sklearn model separately for version safety
+        save_dict = {
+            'sklearn_model': self.model,
+            'params': self.get_params()
+        }
+        joblib.dump(save_dict, filepath)
         logger.info(f"Model saved to {filepath}")
     
-    def load(self, filepath: str) -> None:
+    @classmethod
+    def load(cls, filepath: str) -> 'IsolationForestDetector':
         """Load model from disk.
         
         Args:
             filepath: Path to load the model from
+            
+        Returns:
+            Loaded IsolationForestDetector instance
         """
-        self.model = joblib.load(filepath)
+        save_dict = joblib.load(filepath)
+        
+        # Create new instance with saved parameters
+        detector = cls(**save_dict['params'])
+        detector.model = save_dict['sklearn_model']
+        
         logger.info(f"Model loaded from {filepath}")
+        return detector
     
     def get_params(self) -> Dict[str, Any]:
         """Get model parameters.

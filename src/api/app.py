@@ -78,12 +78,14 @@ async def load_models():
     logger.info("Loading models...")
     
     try:
+        from ..models.isolation_forest import IsolationForestDetector
+        
         # Load models (paths should be configured)
         models_dir = "models/saved"
         
         # Check if models exist
         if os.path.exists(f"{models_dir}/isolation_forest.joblib"):
-            isolation_forest_model = joblib.load(f"{models_dir}/isolation_forest.joblib")
+            isolation_forest_model = IsolationForestDetector.load(f"{models_dir}/isolation_forest.joblib")
             logger.info("Isolation Forest model loaded")
         
         if os.path.exists(f"{models_dir}/feature_engineer.joblib"):

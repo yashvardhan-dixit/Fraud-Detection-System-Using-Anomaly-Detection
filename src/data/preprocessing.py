@@ -63,9 +63,17 @@ class FeatureEngineer:
         df = df.copy()
         
         # User-level aggregations
+        def safe_mode(x):
+            """Safely get mode, handling empty series and NaN values."""
+            x_clean = x.dropna()
+            if len(x_clean) == 0:
+                return 'unknown'
+            mode_vals = x_clean.mode()
+            return mode_vals[0] if len(mode_vals) > 0 else 'unknown'
+        
         user_stats = df.groupby('user_id').agg({
             'amount': ['mean', 'std', 'min', 'max', 'count'],
-            'transaction_type': lambda x: x.mode()[0] if len(x) > 0 and len(x.mode()) > 0 else 'unknown'
+            'transaction_type': safe_mode
         }).reset_index()
         
         user_stats.columns = [

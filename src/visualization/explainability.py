@@ -230,8 +230,14 @@ class ModelExplainer:
         if self.explainer is None:
             raise ValueError("Explainer not fitted. Call fit_explainer first.")
         
+        # Ensure X is 2D array (1, n_features)
+        if X.ndim == 1:
+            X_input = X.reshape(1, -1)
+        else:
+            X_input = X if X.shape[0] == 1 else X[0:1]
+        
         # Calculate SHAP values for this transaction
-        shap_values_single = self.explainer.shap_values(X.reshape(1, -1))
+        shap_values_single = self.explainer.shap_values(X_input)
         
         if isinstance(shap_values_single, list):
             shap_values_single = shap_values_single[0]
